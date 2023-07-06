@@ -6,7 +6,7 @@
 /*   By: pmateo <pmateo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 17:12:21 by pmateo            #+#    #+#             */
-/*   Updated: 2023/07/05 21:02:23 by pmateo           ###   ########.fr       */
+/*   Updated: 2023/07/06 20:19:41 by pmateo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,38 @@ char	*ft_substr(const char *src, unsigned int start, size_t len)
 // qu'après un appel de la fonction gnltest() *str soit récupérer depuis le fichier test par open et
 // read et stockée entièrement malgré un buffer_size de 17 qui est donc sensé la lire en 3 fois.
 
-void	gnltest(int fd, size_t BUFFER_SIZE, char *buffer)
+char	*gnltest(int fd, size_t BUFFER_SIZE, char *buffer)
 {
 	static char	*reserve;
-
-	read(fd, buffer, BUFFER_SIZE);
+	char	*tmp;
+	int	newlinefound;
+	int	sizeofnl;
+	char	*tmpsave;
+	int	countcpy;
+	
+	sizeofnl = 0;
+	newlinefound = 0;
+	tmp[0] = '\0';
+	while(newlinefound != 1)
+	{
+		read(fd, buffer, BUFFER_SIZE);
+		buffer[BUFFER_SIZE] = '\0';
+		ft_strlcpy(tmp, buffer, BUFFER_SIZE + 1);
+		countcpy++;
+		if(countcpy == 1)
+			tmpsave = tmp;
+		if(ft_strchr(buffer, '\n'))
+		{
+			tmp = ft_substr(tmpsave, 0, (ft_strchr(tmp, '\n') - tmpsave));
+			sizeofnl = ft_strlen(tmp);
+			newlinefound = 1;
+			reserve = malloc(sizeofnl * sizeof(char));
+			ft_strlcpy(reserve, tmp, sizeofnl);
+			return (reserve);
+		}
+		tmp += BUFFER_SIZE;
+	}
+	return (reserve);
 }
 
 int	main(void)
@@ -112,9 +139,9 @@ int	main(void)
 	if (!buffer)
 		exit(EXIT_FAILURE);
 	// printf("retour de read : %ld\n", read(fd, buffer, BUFFER_SIZE));
-	gnltest(fd, BUFFER_SIZE, buffer);
+	// gnltest(fd, BUFFER_SIZE, buffer);
+	char *result = gnltest(fd, BUFFER_SIZE, buffer);
+	printf("GNL : %s\n", result);
 	printf("mon buffer contient : '%s'\n", buffer);
 	free(buffer);
-	// char *result = gnltest(fd);
-	// printf("%s\n", result);
 }
