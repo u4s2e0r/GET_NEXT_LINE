@@ -6,7 +6,7 @@
 /*   By: pmateo <pmateo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 17:12:21 by pmateo            #+#    #+#             */
-/*   Updated: 2023/07/12 08:43:05 by pmateo           ###   ########.fr       */
+/*   Updated: 2023/07/17 15:29:51 by pmateo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,81 +140,73 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (str);
 }
 
-
-// void	read_and_check(char *buffer, int fd, size_t BUFFER_SIZE)
-// {
-// 	ssize_t read_return;
-
-// 	read_return = read(fd, buffer, BUFFER_SIZE);
-// 	if()
-// }
-
 char	*gnltest(int fd, size_t BUFFER_SIZE)
 {
 	static char *reserve;
 	char *next_line;
 	char *buffer;
 	ssize_t	read_return;
+	size_t	read_count;
 	
+	read_count = 0;
 	if(BUFFER_SIZE == 0)
 		return(NULL);
 	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
 		return (NULL);
-	buffer[BUFFER_SIZE + 1] = '\0';
 	read_return = read(fd, buffer, BUFFER_SIZE);
+	read_count++;
+	buffer[read_return] = '\0';
 	if (read_return < 0)
 		return (NULL);
-	while (read_return != 0)
+	if (read_return == 0 && !reserve)
+		return (NULL);
+	if (read_return == (ssize_t)BUFFER_SIZE)
 	{
 		if (reserve)
+				reserve = ft_strjoin(reserve, buffer);
+			else
+				reserve = ft_strdup(buffer);
+		
+		while (!ft_strchr(reserve, '\n') || read_return	!= 0)
+		{
+			read_return = read(fd, buffer, BUFFER_SIZE);
+			buffer[read_return] = '\0';
 			reserve = ft_strjoin(reserve, buffer);
-		else
+			read_count++;
+		}
+		next_line = ft_substr(reserve, 0, (size_to_nl(reserve) + 1));
+		reserve = ft_strdup((ft_strchr(reserve, '\n') + 1));
+	}
+	if(read_count == 1 && read_return != (ssize_t)BUFFER_SIZE)
+	{
+		if (reserve && *buffer)
+			reserve = ft_strjoin(reserve, buffer);
+		else if (!reserve)
 			reserve = ft_strdup(buffer);
-		while (ft_strchr(reserve, '\n'))
+		if (!ft_strchr(reserve, '\n') && read_return == 0)
+		{
+			next_line = ft_strdup(reserve);
+			reserve = NULL;
+		}
+		else
 		{
 			next_line = ft_substr(reserve, 0, (size_to_nl(reserve) + 1));
 			reserve = ft_strdup((ft_strchr(reserve, '\n') + 1));
-			break;
 		}
-	}
-	if (!read_return)
-	{
-		while (reserve)
-		{
-			reserve = ft_strjoin(reserve, buffer);
-		}
-		
-	}
-	if (reserve == NULL)
-	{
-		next_line = NULL;
 	}
 	return (next_line);
 }
 
 int	main(void)
 {
-	// "Il etait une fois l'histoire d'un ado"; len = 37 (Il etait une fois = 17)
-	size_t BUFFER_SIZE = 100;
+	size_t BUFFER_SIZE = 2;
 	char *result;
 	int	fd = open("test.txt", O_RDONLY);
 	printf("fd = %d\nBUFFER_SIZE = %ld\n", fd, BUFFER_SIZE);
-	// printf("retour de read : %ld\n", read(fd, buffer, BUFFER_SIZE));
-	// gnltest(fd, BUFFER_SIZE, buffer);
 	while(result != NULL)
 	{
 		result = gnltest(fd, BUFFER_SIZE);
 		printf("GNL : %s\n", result);
 	}
 }
-
-// int	main(void)
-// {
-// 	size_t BUFFER_SIZE = 10000;
-// 	char	*buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
-// 	int fd = open("test.txt", O_RDONLY);
-// 	read(fd, buffer, BUFFER_SIZE);
-// 	buffer[BUFFER_SIZE + 1] = '\0';
-// 	printf(" ")
-// }
