@@ -6,7 +6,7 @@
 /*   By: pmateo <pmateo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 17:12:16 by pmateo            #+#    #+#             */
-/*   Updated: 2023/07/18 22:00:43 by pmateo           ###   ########.fr       */
+/*   Updated: 2023/07/19 19:10:39 by pmateo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static char	*rc_sameas_bs(char *reserve, char *buffer, char **next_line, size_t read_return, int fd)
 {
-	if (reserve)
+	if (reserve && *buffer)
 		reserve = ft_strjoin(reserve, buffer);
-	else
+	else if (!reserve)
 		reserve = ft_strdup(buffer);
 	while (!ft_strchr(reserve, '\n') && read_return	!= 0)
 	{
@@ -27,12 +27,18 @@ static char	*rc_sameas_bs(char *reserve, char *buffer, char **next_line, size_t 
 	if (read_return == 0)
 	{
 		*next_line = ft_strdup(reserve);
+		free(reserve);
 		reserve = NULL;
 	}
 	else
 	{
 		*next_line = ft_substr(reserve, 0, (size_to_nl(reserve) + 1));
 		reserve = ft_strdup((ft_strchr(reserve, '\n') + 1));
+		if (!*reserve)
+		{
+			free(reserve);
+			reserve = NULL;
+		}
 	}
 	return (reserve);
 }
@@ -43,7 +49,7 @@ static char	*rc_unlike_bs(char *reserve, char *buffer, char **next_line)
 		reserve = ft_strjoin(reserve, buffer);
 	else if (!reserve)
 		reserve = ft_strdup(buffer);
-	if (!ft_strchr(reserve, '\n'))
+	if (!ft_strchr(reserve, '\n') && *reserve)
 	{
 		*next_line = ft_strdup(reserve);
 		free(reserve);
@@ -62,9 +68,9 @@ static char	*read_and_fill(char *buffer, char *reserve, char **next_line, int fd
 	ssize_t	read_return;
 
 	read_return = read(fd, buffer, BUFFER_SIZE);
-	buffer[read_return] = '\0';
 	if ((read_return < 0) || (read_return == 0 && !reserve))
 		return (NULL);
+	buffer[read_return] = '\0';
 	if (read_return == (ssize_t)BUFFER_SIZE)
 		reserve = rc_sameas_bs(reserve, buffer, next_line, read_return, fd);
 	else if (read_return != (ssize_t)BUFFER_SIZE)
@@ -86,18 +92,21 @@ char	*get_next_line(int fd)
 		return (NULL);
 	reserve = read_and_fill(buffer, reserve, &next_line, fd);
 	free(buffer);
+	buffer = NULL;
 	return (next_line);
 }
 
-int	main(void)
-{
-	char *result;
-	int	fd = open("alternate_line_nl_with_nl.txt", O_RDONLY);
-	printf("fd = %d\nBUFFER_SIZE = %d\n", fd, BUFFER_SIZE);
-	while(result != NULL)
-	{
-		result = get_next_line(fd);
-		printf("GNL : %s\n", result);
-	}
-	close(fd);
-}
+// int	main(void)
+// {
+// 	char *result;
+// 	int	fd = open("41_no_nl.txt", O_RDONLY);
+// 	printf("fd = %d\nBUFFER_SIZE = %d\n", fd, BUFFER_SIZE);
+// 	result = get_next_line(fd);
+// 	printf("GNL : %s\n", result);
+// 	while(result != NULL)
+// 	{
+// 		result = get_next_line(fd);
+// 		printf("GNL : %s\n", result);
+// 	}
+// 	close(fd);
+// }

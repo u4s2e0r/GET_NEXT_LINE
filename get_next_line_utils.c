@@ -6,7 +6,7 @@
 /*   By: pmateo <pmateo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 17:12:12 by pmateo            #+#    #+#             */
-/*   Updated: 2023/07/17 15:31:00 by pmateo           ###   ########.fr       */
+/*   Updated: 2023/07/19 19:11:17 by pmateo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 size_t	ft_strlen(const char *str)
 {
 	size_t	i;
-
+	
 	i = 0;
+	if (!str)
+		return (0);
 	while (str[i] != '\0')
 		i++;
 	return (i);
@@ -27,6 +29,8 @@ size_t	size_to_nl(const char *str)
 	size_t i;
 
 	i = 0;
+	if (!str)
+		return (0);
 	while(str[i] != '\n')
 		i++;
 	return (i);
@@ -93,17 +97,22 @@ char	*ft_substr(const char *src, unsigned int start, size_t len)
 	}
 }
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup(const char *src)
 {
-	size_t	size;
-	char	*s2;
+	char		*s;
+	int			i;
 
-	size = ft_strlen(s1) + 1;
-	s2 = malloc(size * sizeof(char));
-	if (s2 == NULL)
+	i = 0;
+	s = malloc((ft_strlen(src) + 1) * sizeof(*src));
+	if (!s)
 		return (NULL);
-	ft_strlcpy(s2, s1, size);
-	return (s2);
+	while (src[i])
+	{
+		s[i] = src[i];
+		i++;
+	}
+	s[i] = 0;
+	return (s);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
@@ -117,7 +126,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	j = 0;
 	size = ft_strlen(s1) + ft_strlen(s2) + 1;
 	str = malloc(size * sizeof(char));
-	if (str == NULL)
+	if (!str || !s1 || !s2)
 		return (NULL);
 	while (s1[i] != '\0')
 	{
