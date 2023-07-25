@@ -1,18 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pmateo <pmateo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/25 19:19:46 by pmateo            #+#    #+#             */
-/*   Updated: 2023/07/25 21:53:32 by pmateo           ###   ########.fr       */
+/*   Created: 2023/07/25 21:48:56 by pmateo            #+#    #+#             */
+/*   Updated: 2023/07/25 21:49:31 by pmateo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-// vérifier le cas ou il n'il y a pas de backslash n
 static int read_and_fill(char *buffer, int fd,char **reserve)
 {
 	ssize_t read_ret;
@@ -24,7 +23,7 @@ static int read_and_fill(char *buffer, int fd,char **reserve)
 	while (!ft_strchr(*reserve, '\n') && read_ret != 0)
 	{
 		read_ret = read(fd, buffer, BUFFER_SIZE);
-		if((read_ret < 0) || (read_ret == 0 && !**reserve))//!**reserve ?
+		if((read_ret < 0) || (read_ret == 0 && !**reserve))
 			return (-1);
 		buffer[read_ret] = '\0';
 		tmp = *reserve;
@@ -78,19 +77,4 @@ char	*get_next_line(int fd)
 	else 
 		next_line = build_next_line(&reserve);
 	return (next_line);
-}
-
-int	main(void)
-{
-	char *result;
-	int	fd = open("test.txt", O_RDONLY);
-	printf("fd = %d\nBUFFER_SIZE = %d\n", fd, BUFFER_SIZE);
-	result = get_next_line(fd);
-	printf("GNL : %s\n", result);
-	while(result != NULL)
-	{
-		result = get_next_line(fd);
-		printf("GNL : %s\n", result);
-	}
-	close(fd);
 }
