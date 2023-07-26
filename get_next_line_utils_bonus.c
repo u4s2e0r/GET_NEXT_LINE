@@ -6,30 +6,29 @@
 /*   By: pmateo <pmateo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 21:48:52 by pmateo            #+#    #+#             */
-/*   Updated: 2023/07/25 21:49:07 by pmateo           ###   ########.fr       */
+/*   Updated: 2023/07/26 18:50:00 by pmateo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
-size_t	ft_strlen(const char *str)
+size_t	ft_strlen(const char *str, int bool)
 {
 	size_t	i;
 
 	i = 0;
-	while (str[i] != '\0')
-		i++;
-	return (i);
-}
-
-size_t	size_to_nl(const char *str)
-{
-	size_t i;
-
-	i = 0;
-	while(str[i] != '\n')
-		i++;
-	return (i);
+	if (bool == 1)
+	{
+		while (str[i] != '\0')
+			i++;
+		return (i);
+	}
+	else
+	{
+		while (str[i] != '\n')
+			i++;
+		return (i);	
+	}
 }
 
 char	*ft_strchr(const char *str, int c)

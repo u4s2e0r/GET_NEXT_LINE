@@ -6,34 +6,31 @@
 /*   By: pmateo <pmateo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 17:12:12 by pmateo            #+#    #+#             */
-/*   Updated: 2023/07/19 19:11:17 by pmateo           ###   ########.fr       */
+/*   Updated: 2023/07/26 18:51:35 by pmateo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *str)
+//modifier chaque utils avec le nouveau strlen
+//supprimer strlcpy
+size_t	ft_strlen(const char *str, int bool)
 {
 	size_t	i;
-	
-	i = 0;
-	if (!str)
-		return (0);
-	while (str[i] != '\0')
-		i++;
-	return (i);
-}
-
-size_t	size_to_nl(const char *str)
-{
-	size_t i;
 
 	i = 0;
-	if (!str)
-		return (0);
-	while(str[i] != '\n')
-		i++;
-	return (i);
+	if (bool == 1)
+	{
+		while (str[i] != '\0')
+			i++;
+		return (i);
+	}
+	else
+	{
+		while (str[i] != '\n')
+			i++;
+		return (i);	
+	}
 }
 
 char	*ft_strchr(const char *str, int c)
@@ -73,7 +70,7 @@ char	*ft_substr(const char *src, unsigned int start, size_t len)
 {
 	char	*str;
 	size_t	strlen;
-	
+
 	if (!src)
 		return(NULL);
 	if (start > ft_strlen(src))

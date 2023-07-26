@@ -6,25 +6,24 @@
 /*   By: pmateo <pmateo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 19:19:46 by pmateo            #+#    #+#             */
-/*   Updated: 2023/07/25 22:04:40 by pmateo           ###   ########.fr       */
+/*   Updated: 2023/07/26 18:38:28 by pmateo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-// vérifier le cas ou il n'il y a pas de backslash n
-static int read_and_fill(char *buffer, int fd,char **reserve)
+static	int	read_and_fill(char *buffer, int fd, char **reserve)
 {
-	ssize_t read_ret;
+	ssize_t	read_ret;
 	char	*tmp;
-	
+
 	read_ret = 42;
 	if (!*reserve)
 		*reserve = ft_strdup("");
 	while (!ft_strchr(*reserve, '\n') && read_ret != 0)
 	{
 		read_ret = read(fd, buffer, BUFFER_SIZE);
-		if((read_ret < 0) || (read_ret == 0 && !**reserve))//!**reserve ?
+		if ((read_ret < 0) || (read_ret == 0 && !**reserve))
 			return (-1);
 		buffer[read_ret] = '\0';
 		tmp = *reserve;
@@ -53,11 +52,11 @@ static char	*build_next_line(char **reserve)
 
 char	*get_next_line(int fd)
 {
-	char	*buffer;
-	char	*next_line;
+	char		*buffer;
+	char		*next_line;
 	static char	*reserve;
-	int	check_behavior;
-	
+	int			check_behavior;
+
 	check_behavior = 0;
 	if (BUFFER_SIZE == 0 || fd < 0)
 		return (NULL);
@@ -75,22 +74,22 @@ char	*get_next_line(int fd)
 		free(reserve);
 		reserve = NULL;
 	}
-	else 
+	else
 		next_line = build_next_line(&reserve);
 	return (next_line);
 }
 
-int	main(void)
-{
-	char *result;
-	int	fd = open("test.txt", O_RDONLY);
-	printf("fd = %d\nBUFFER_SIZE = %d\n", fd, BUFFER_SIZE);
-	result = get_next_line(fd);
-	printf("GNL : %s\n", result);
-	while(result != NULL)
-	{
-		result = get_next_line(fd);
-		printf("GNL : %s\n", result);
-	}
-	close(fd);
-}
+// int	main(void)
+// {
+// 	char *result;
+// 	int	fd = open("test.txt", O_RDONLY);
+// 	printf("fd = %d\nBUFFER_SIZE = %d\n", fd, BUFFER_SIZE);
+// 	result = get_next_line(fd);
+// 	printf("GNL : %s\n", result);
+// 	while(result != NULL)
+// 	{
+// 		result = get_next_line(fd);
+// 		printf("GNL : %s\n", result);
+// 	}
+// 	close(fd);
+// }
