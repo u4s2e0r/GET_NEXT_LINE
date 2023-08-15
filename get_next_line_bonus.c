@@ -6,7 +6,7 @@
 /*   By: pmateo <pmateo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 21:48:56 by pmateo            #+#    #+#             */
-/*   Updated: 2023/07/26 18:39:51 by pmateo           ###   ########.fr       */
+/*   Updated: 2023/07/30 19:22:44 by pmateo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static char	*build_next_line(char **reserve)
 	char	*tmp;
 	char	*line;
 
-	line = ft_substr(*reserve, 0, (size_to_nl(*reserve) + 1));
+	line = ft_substr(*reserve, 0, (ft_strlen(*reserve, 2) + 1));
 	tmp = *reserve;
 	*reserve = ft_strdup((ft_strchr(*reserve, '\n') + 1));
 	free(tmp);

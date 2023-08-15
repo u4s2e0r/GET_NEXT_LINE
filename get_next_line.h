@@ -6,7 +6,7 @@
 /*   By: pmateo <pmateo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 17:12:19 by pmateo            #+#    #+#             */
-/*   Updated: 2023/07/26 18:50:21 by pmateo           ###   ########.fr       */
+/*   Updated: 2023/07/30 19:26:51 by pmateo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 #  define BUFFER_SIZE 420
 # endif
 
-size_t		ft_strlen(const char *str, int bool);
+size_t		ft_strlen(const char *str, int c);
 char		*ft_strchr(const char *str, int c);
 size_t		ft_strlcpy(char *dest, const char *src, size_t size);
 char		*ft_substr(const char *src, unsigned int start, size_t len);

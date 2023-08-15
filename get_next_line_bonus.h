@@ -5,13 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pmateo <pmateo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/04 17:12:19 by pmateo            #+#    #+#             */
-/*   Updated: 2023/07/26 18:49:23 by pmateo           ###   ########.fr       */
+/*   Created: 2023/07/30 19:19:10 by pmateo            #+#    #+#             */
+/*   Updated: 2023/07/30 19:27:07 by pmateo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # include <stdio.h>
 # include <stddef.h>
@@ -25,7 +25,7 @@
 #  define BUFFER_SIZE 420
 # endif
 
-size_t		ft_strlen(const char *str, int bool);
+size_t		ft_strlen(const char *str, int c);
 char		*ft_strchr(const char *str, int c);
 size_t		ft_strlcpy(char *dest, const char *src, size_t size);
 char		*ft_substr(const char *src, unsigned int start, size_t len);
