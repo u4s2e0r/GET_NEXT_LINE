@@ -6,11 +6,18 @@
 /*   By: pmateo <pmateo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 19:19:46 by pmateo            #+#    #+#             */
-/*   Updated: 2023/07/30 19:25:55 by pmateo           ###   ########.fr       */
+/*   Updated: 2023/08/18 16:26:45 by pmateo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+int	free_last_call(char *reserve)
+{
+	free(reserve);
+	reserve = NULL;
+	return (-1);
+}
 
 static	int	read_and_fill(char *buffer, int fd, char **reserve)
 {
@@ -24,7 +31,9 @@ static	int	read_and_fill(char *buffer, int fd, char **reserve)
 	{
 		read_ret = read(fd, buffer, BUFFER_SIZE);
 		if ((read_ret < 0) || (read_ret == 0 && !**reserve))
-			return (-1);
+			return (free_last_call(*reserve));
+		if(read_ret == 0)
+			break;
 		buffer[read_ret] = '\0';
 		tmp = *reserve;
 		*reserve = ft_strjoin(*reserve, buffer);
@@ -79,17 +88,18 @@ char	*get_next_line(int fd)
 	return (next_line);
 }
 
-// int	main(void)
-// {
-// 	char *result;
-// 	int	fd = open("test.txt", O_RDONLY);
-// 	printf("fd = %d\nBUFFER_SIZE = %d\n", fd, BUFFER_SIZE);
-// 	result = get_next_line(fd);
-// 	printf("GNL : %s\n", result);
-// 	while(result != NULL)
-// 	{
-// 		result = get_next_line(fd);
-// 		printf("GNL : %s\n", result);
-// 	}
-// 	close(fd);
-// }
+int	main(void)
+{
+	char *result;
+	int	fd = open("test.txt", O_RDONLY);
+	printf("fd = %d\nBUFFER_SIZE = %d\n", fd, BUFFER_SIZE);
+	result = get_next_line(fd);
+	printf("GNL : %s\n", result);
+	free(result);
+	while(result != NULL)
+	{
+		result = get_next_line(fd);
+		printf("GNL : %s\n", result);
+	}
+	close(fd);
+}
