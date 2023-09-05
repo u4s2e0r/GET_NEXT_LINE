@@ -6,11 +6,18 @@
 /*   By: pmateo <pmateo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 21:48:56 by pmateo            #+#    #+#             */
-/*   Updated: 2023/07/30 19:22:44 by pmateo           ###   ########.fr       */
+/*   Updated: 2023/09/05 17:54:24 by pmateo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
+
+static int	free_last_call(char *reserve)
+{
+	free(reserve);
+	reserve = NULL;
+	return (-1);
+}
 
 static	int	read_and_fill(char *buffer, int fd, char **reserve)
 {
@@ -24,7 +31,7 @@ static	int	read_and_fill(char *buffer, int fd, char **reserve)
 	{
 		read_ret = read(fd, buffer, BUFFER_SIZE);
 		if ((read_ret < 0) || (read_ret == 0 && !**reserve))
-			return (-1);
+			return (free_last_call(*reserve));
 		buffer[read_ret] = '\0';
 		tmp = *reserve;
 		*reserve = ft_strjoin(*reserve, buffer);

@@ -6,13 +6,13 @@
 /*   By: pmateo <pmateo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 19:19:46 by pmateo            #+#    #+#             */
-/*   Updated: 2023/08/18 16:26:45 by pmateo           ###   ########.fr       */
+/*   Updated: 2023/09/05 18:00:35 by pmateo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	free_last_call(char *reserve)
+static int	free_last_call(char *reserve)
 {
 	free(reserve);
 	reserve = NULL;
@@ -32,8 +32,6 @@ static	int	read_and_fill(char *buffer, int fd, char **reserve)
 		read_ret = read(fd, buffer, BUFFER_SIZE);
 		if ((read_ret < 0) || (read_ret == 0 && !**reserve))
 			return (free_last_call(*reserve));
-		if(read_ret == 0)
-			break;
 		buffer[read_ret] = '\0';
 		tmp = *reserve;
 		*reserve = ft_strjoin(*reserve, buffer);
@@ -69,7 +67,7 @@ char	*get_next_line(int fd)
 	check_behavior = 0;
 	if (BUFFER_SIZE == 0 || fd < 0)
 		return (NULL);
-	buffer = malloc ((BUFFER_SIZE + 1) * sizeof(char));
+	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
 		return (NULL);
 	check_behavior = read_and_fill(buffer, fd, &reserve);
